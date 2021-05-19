@@ -50,6 +50,7 @@ namespace Boscohyun.RxPresenter
 
         public virtual void Dispose()
         {
+            PresenterStateReactiveProperty.Dispose();
             ShowAnimationBeginningSubject.Dispose();
             ShowAnimationEndSubject.Dispose();
             HideAnimationBeginningSubject.Dispose();
