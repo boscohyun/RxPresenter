@@ -9,8 +9,8 @@ namespace Boscohyun.RxPresenter.External.Unity
     public class Presenter<T> : MonoBehaviour, IReactivePresenter<T>, IView, IViewAnimator
         where T : Presenter<T>
     {
-        private static readonly int AnimatorHashShow = Animator.StringToHash("Show");
-        private static readonly int AnimatorHashHide = Animator.StringToHash("Hide");
+        protected static readonly int AnimatorHashShow = Animator.StringToHash("Show");
+        protected static readonly int AnimatorHashHide = Animator.StringToHash("Hide");
 
         private ReactivePresenter _reactivePresenter;
 
@@ -62,7 +62,7 @@ namespace Boscohyun.RxPresenter.External.Unity
         public IObservable<T> OnHideAnimationBeginning => _reactivePresenter.OnPresenterStateChange.Select(_ => (T) this);
         public IObservable<T> OnHideAnimationEnd => _reactivePresenter.OnPresenterStateChange.Select(_ => (T) this);
 
-        private void Awake()
+        protected virtual void Awake()
         {
             if (showAtAwake)
             {
@@ -75,7 +75,7 @@ namespace Boscohyun.RxPresenter.External.Unity
             }
         }
 
-        private void OnDestroy()
+        protected virtual void OnDestroy()
         {
             ((IDisposable) this).Dispose();
         }
