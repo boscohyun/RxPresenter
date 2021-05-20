@@ -1,9 +1,8 @@
-﻿#if RXPRESENTER_UNITY_SUPPORT
-using System;
+﻿using System;
 using UniRx;
 using UnityEngine;
 
-namespace Boscohyun.RxPresenter.External.Unity
+namespace Boscohyun.RxPresenter
 {
     [DisallowMultipleComponent]
     public class Presenter<T> : MonoBehaviour, IReactivePresenter<T>, IView, IViewAnimator
@@ -105,4 +104,3 @@ namespace Boscohyun.RxPresenter.External.Unity
             _reactivePresenter.HideAsObservable(skipAnimation);
     }
 }
-#endif
