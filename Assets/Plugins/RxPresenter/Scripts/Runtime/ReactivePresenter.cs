@@ -42,7 +42,8 @@ namespace Boscohyun.RxPresenter
         {
             if (_view.HasViewAnimator && !_view.ViewAnimator.AnimatorAlwaysActive)
             {
-                _view.ViewAnimator.SetActive(false);
+                _view.ViewAnimator.SetActive(ViewAnimationName.Show, false);
+                _view.ViewAnimator.SetActive(ViewAnimationName.Hide, false);
             }
 
             PresenterStateReactiveProperty.Value = state;
@@ -93,7 +94,7 @@ namespace Boscohyun.RxPresenter
             {
                 if (!_view.ViewAnimator.AnimatorAlwaysActive)
                 {
-                    _view.ViewAnimator.SetActive(true);
+                    _view.ViewAnimator.SetActive(ViewAnimationName.Show, true);
                 }
 
                 _view.ViewAnimator.PlayAnimation(ViewAnimationName.Show, skip ? 1f : 0f);
@@ -122,7 +123,7 @@ namespace Boscohyun.RxPresenter
 
             if (_view.HasViewAnimator && !_view.ViewAnimator.AnimatorAlwaysActive)
             {
-                _view.ViewAnimator.SetActive(false);
+                _view.ViewAnimator.SetActive(ViewAnimationName.Show, false);
             }
 
             ShowAnimationEndSubject.OnNext(this);
@@ -165,7 +166,7 @@ namespace Boscohyun.RxPresenter
             {
                 if (!_view.ViewAnimator.AnimatorAlwaysActive)
                 {
-                    _view.ViewAnimator.SetActive(true);
+                    _view.ViewAnimator.SetActive(ViewAnimationName.Hide, true);
                 }
 
                 _view.ViewAnimator.PlayAnimation(ViewAnimationName.Hide, skip ? 1f : 0f);
@@ -195,7 +196,7 @@ namespace Boscohyun.RxPresenter
 
             if (_view.HasViewAnimator && !_view.ViewAnimator.AnimatorAlwaysActive)
             {
-                _view.ViewAnimator.SetActive(false);
+                _view.ViewAnimator.SetActive(ViewAnimationName.Hide, false);
             }
 
             HideAnimationEndSubject.OnNext(this);
