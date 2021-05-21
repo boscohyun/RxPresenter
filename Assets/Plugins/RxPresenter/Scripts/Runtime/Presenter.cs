@@ -33,23 +33,23 @@ namespace Boscohyun.RxPresenter
 
         bool IViewAnimator.AnimatorAlwaysActive => animatorAlwaysEnabled;
 
-        ViewAnimationName IViewAnimator.CurrentAnimationName =>
+        ViewAnimatorState IViewAnimator.CurrentAnimatorState =>
             animator.GetCurrentAnimatorStateInfo(default).shortNameHash == AnimatorHashHide
-                ? ViewAnimationName.Hide
-                : ViewAnimationName.Show;
+                ? ViewAnimatorState.Hide
+                : ViewAnimatorState.Show;
 
-        float IViewAnimator.CurrentAnimationNormalizedTime =>
+        float IViewAnimator.CurrentAnimatorStateNormalizedTime =>
             animator.GetCurrentAnimatorStateInfo(default).normalizedTime;
         
-        void IViewAnimator.PlayAnimation(ViewAnimationName viewAnimationName, float normalizedTime) =>
+        void IViewAnimator.PlayAnimation(ViewAnimatorState viewAnimatorState, float normalizedTime) =>
             animator.Play(
-                viewAnimationName == ViewAnimationName.Hide
+                viewAnimatorState == ViewAnimatorState.Hide
                     ? AnimatorHashHide
                     : AnimatorHashShow,
                 default,
                 normalizedTime);
 
-        void IViewAnimator.SetActive(ViewAnimationName viewAnimationName, bool active)
+        void IViewAnimator.SetActive(ViewAnimatorState viewAnimatorState, bool active)
         {
             if (active == animator.enabled)
             {
@@ -71,14 +71,10 @@ namespace Boscohyun.RxPresenter
 
         protected virtual void Awake()
         {
+            _reactivePresenter = new ReactivePresenter(this);
             if (showAtAwake)
             {
-                _reactivePresenter = new ReactivePresenter(this, PresenterState.Hidden);
                 _reactivePresenter.Show();
-            }
-            else
-            {
-                _reactivePresenter = new ReactivePresenter(this);
             }
         }
 
@@ -104,11 +100,12 @@ namespace Boscohyun.RxPresenter
 
         public void Hide(bool skipAnimation = default) => _reactivePresenter.Hide(skipAnimation);
 
-        public void Hide(Action callback) => _reactivePresenter.Hide(callback);
+        public void Hide(Action<T> callback) => _reactivePresenter.Hide(_ => callback?.Invoke((T) this));
 
-        public void Hide(bool skipAnimation, Action callback) => _reactivePresenter.Hide(skipAnimation, callback);
+        public void Hide(bool skipAnimation, Action<T> callback) =>
+            _reactivePresenter.Hide(skipAnimation, _ => callback?.Invoke((T) this));
 
-        public IObservable<Unit> HideAsObservable(bool skipAnimation = default) =>
-            _reactivePresenter.HideAsObservable(skipAnimation);
+        public IObservable<T> HideAsObservable(bool skipAnimation = default) =>
+            _reactivePresenter.HideAsObservable(skipAnimation).Select(_ => (T) this);
     }
 }

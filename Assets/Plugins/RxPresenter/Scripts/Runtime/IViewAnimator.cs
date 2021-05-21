@@ -4,12 +4,12 @@
     {
         bool AnimatorAlwaysActive { get; }
         
-        ViewAnimationName CurrentAnimationName { get; }
+        ViewAnimatorState CurrentAnimatorState { get; }
         
-        float CurrentAnimationNormalizedTime { get; }
+        float CurrentAnimatorStateNormalizedTime { get; }
 
-        void PlayAnimation(ViewAnimationName viewAnimationName, float normalizedTime);
+        void PlayAnimation(ViewAnimatorState viewAnimatorState, float normalizedTime);
         
-        void SetActive(ViewAnimationName viewAnimationName, bool active);
+        void SetActive(ViewAnimatorState viewAnimatorState, bool active);
     }
 }

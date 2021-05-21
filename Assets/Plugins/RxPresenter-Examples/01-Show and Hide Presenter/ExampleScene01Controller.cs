@@ -24,11 +24,9 @@ namespace Boscohyun.RxPresenter.Examples
                 .AddTo(gameObject);
             
             leftButton.OnClickAsObservable()
-                .ThrottleFirst(TimeSpan.FromMilliseconds(500d))
                 .Subscribe(_ => ShowOrHidePresenter(leftCube))
                 .AddTo(gameObject);
             rightButton.OnClickAsObservable()
-                .ThrottleFirst(TimeSpan.FromMilliseconds(500d))
                 .Subscribe(_ => ShowOrHidePresenter(rightCube))
                 .AddTo(gameObject);
         }
