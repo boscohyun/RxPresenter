@@ -49,15 +49,7 @@ namespace Boscohyun.RxPresenter
                 default,
                 normalizedTime);
 
-        void IViewAnimator.SetActive(ViewAnimatorState viewAnimatorState, bool active)
-        {
-            if (active == animator.enabled)
-            {
-                return;
-            }
-            
-            animator.enabled = active;
-        }
+        void IViewAnimator.SetActive(bool active) => animator.enabled = active;
 
         #endregion
 

@@ -29,8 +29,8 @@ namespace Boscohyun.RxPresenter
             _view = view ?? throw new ArgumentNullException($"{nameof(view)} is null.");
             if (_view.HasViewAnimator && !_view.ViewAnimator.AnimatorAlwaysActive)
             {
-                _view.ViewAnimator.SetActive(ViewAnimatorState.Show, false);
-                _view.ViewAnimator.SetActive(ViewAnimatorState.Hide, false);
+                _view.ViewAnimator.SetActive(false);
+                _view.ViewAnimator.SetActive(false);
             }
 
             PresenterStateReactiveProperty.Value = _view.ActiveSelf
@@ -65,8 +65,8 @@ namespace Boscohyun.RxPresenter
                 : ShowAnimationAsync().ToObservable().Select(_ => this);
 
             return _view.HasViewAnimator && !_view.ViewAnimator.AnimatorAlwaysActive
-                ? observable.DelayFrame(1).DoOnCompleted(ShowAnimationEnd)
-                : observable.DoOnCompleted(ShowAnimationEnd);
+                ? observable.DelayFrame(1).DoOnSubscribe(ShowAnimationEnd)
+                : observable.DoOnSubscribe(ShowAnimationEnd);
         }
 
         protected virtual void ShowAnimationBeginning(bool skip = default)
@@ -78,7 +78,7 @@ namespace Boscohyun.RxPresenter
             {
                 if (!_view.ViewAnimator.AnimatorAlwaysActive)
                 {
-                    _view.ViewAnimator.SetActive(ViewAnimatorState.Show, true);
+                    _view.ViewAnimator.SetActive(true);
                 }
 
                 _view.ViewAnimator.PlayAnimation(ViewAnimatorState.Show, skip ? 1f : 0f);
@@ -107,7 +107,7 @@ namespace Boscohyun.RxPresenter
 
             if (_view.HasViewAnimator && !_view.ViewAnimator.AnimatorAlwaysActive)
             {
-                _view.ViewAnimator.SetActive(ViewAnimatorState.Show, false);
+                _view.ViewAnimator.SetActive(false);
             }
 
             ShowAnimationEndSubject.OnNext(this);
@@ -133,8 +133,8 @@ namespace Boscohyun.RxPresenter
                 : HideAnimationAsync().ToObservable().Select(_ => this);
 
             return _view.HasViewAnimator && !_view.ViewAnimator.AnimatorAlwaysActive
-                ? observable.DelayFrame(1).DoOnCompleted(HideAnimationEnd)
-                : observable.DoOnCompleted(HideAnimationEnd);
+                ? observable.DelayFrame(1).DoOnSubscribe(HideAnimationEnd)
+                : observable.DoOnSubscribe(HideAnimationEnd);
         }
 
         protected virtual void HideAnimationBegin(bool skip = default)
@@ -145,7 +145,7 @@ namespace Boscohyun.RxPresenter
             {
                 if (!_view.ViewAnimator.AnimatorAlwaysActive)
                 {
-                    _view.ViewAnimator.SetActive(ViewAnimatorState.Hide, true);
+                    _view.ViewAnimator.SetActive(true);
                 }
 
                 _view.ViewAnimator.PlayAnimation(ViewAnimatorState.Hide, skip ? 1f : 0f);
@@ -175,7 +175,7 @@ namespace Boscohyun.RxPresenter
 
             if (_view.HasViewAnimator && !_view.ViewAnimator.AnimatorAlwaysActive)
             {
-                _view.ViewAnimator.SetActive(ViewAnimatorState.Hide, false);
+                _view.ViewAnimator.SetActive(false);
             }
 
             HideAnimationEndSubject.OnNext(this);

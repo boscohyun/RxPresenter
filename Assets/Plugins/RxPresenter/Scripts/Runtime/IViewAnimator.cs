@@ -10,6 +10,6 @@
 
         void PlayAnimation(ViewAnimatorState viewAnimatorState, float normalizedTime);
         
-        void SetActive(ViewAnimatorState viewAnimatorState, bool active);
+        void SetActive(bool active);
     }
 }
