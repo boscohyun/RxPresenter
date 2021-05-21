@@ -3,7 +3,7 @@ using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Boscohyun.RxPresenter.Examples.Unity
+namespace Boscohyun.RxPresenter.Examples
 {
     public class ExampleScene01Controller : MonoBehaviour
     {

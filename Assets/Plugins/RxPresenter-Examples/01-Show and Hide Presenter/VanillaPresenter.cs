@@ -1,4 +1,4 @@
-﻿namespace Boscohyun.RxPresenter.Examples.Unity
+﻿namespace Boscohyun.RxPresenter.Examples
 {
     public class VanillaPresenter : Presenter<VanillaPresenter>
     {
