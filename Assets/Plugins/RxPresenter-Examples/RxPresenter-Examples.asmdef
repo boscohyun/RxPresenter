@@ -1,9 +1,9 @@
 {
-    "name": "RxPresenter",
-    "rootNamespace": "Boscohyun.RxPresenter",
+    "name": "RxPresenter-Examples",
+    "rootNamespace": "Boscohyun.RxPresenter.Examples",
     "references": [
-        "GUID:560b04d1a97f54a4e82edc0cbbb69285",
-        "GUID:f51ebe6a0ceec4240a699833d6309b23"
+        "GUID:6430a00dcf487ba46bab3dac9f1de8e9",
+        "GUID:560b04d1a97f54a4e82edc0cbbb69285"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
