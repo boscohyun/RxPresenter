@@ -1,6 +1,6 @@
 {
-    "name": "RxPresenter.Unity",
-    "rootNamespace": "",
+    "name": "RxPresenter-Examples",
+    "rootNamespace": "Boscohyun.RxPresenter.Examples",
     "references": [
         "GUID:6430a00dcf487ba46bab3dac9f1de8e9",
         "GUID:560b04d1a97f54a4e82edc0cbbb69285"
@@ -12,12 +12,6 @@
     "precompiledReferences": [],
     "autoReferenced": true,
     "defineConstraints": [],
-    "versionDefines": [
-        {
-            "name": "Unity",
-            "expression": "",
-            "define": "RXPRESENTER_UNITY_SUPPORT"
-        }
-    ],
+    "versionDefines": [],
     "noEngineReferences": false
 }

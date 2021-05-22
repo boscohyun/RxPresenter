@@ -4,5 +4,8 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Plugins/RxPresenter-Examples/01-Show and Hide Presenter/ExampleScene01.unity
+    guid: a1bfe7cc060b1704992e5b86fa798c58
   m_configObjects: {}

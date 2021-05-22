@@ -2,13 +2,15 @@
 {
     public interface IViewAnimator
     {
+        int AnimatorActiveDelayFrame { get; }
+        
         bool AnimatorAlwaysActive { get; }
         
-        ViewAnimationName CurrentAnimationName { get; }
+        ViewAnimatorState CurrentAnimatorState { get; }
         
-        float CurrentAnimationNormalizedTime { get; }
+        float CurrentAnimatorStateNormalizedTime { get; }
 
-        void PlayAnimation(ViewAnimationName viewAnimationName, float normalizedTime);
+        void PlayAnimation(ViewAnimatorState viewAnimatorState, float normalizedTime);
         
         void SetActive(bool active);
     }

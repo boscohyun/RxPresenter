@@ -1044,6 +1044,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c51c2ead69f34e409391715b8762d730, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  skipAnimation: 0
   leftCube: {fileID: 1116696924}
   rightCube: {fileID: 1014848760}
   leftButton: {fileID: 622448422}

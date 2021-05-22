@@ -1,6 +1,6 @@
 ﻿namespace Boscohyun.RxPresenter
 {
-    public enum ViewAnimationName
+    public enum ViewAnimatorState
     {
         Show = default,
         Hide,

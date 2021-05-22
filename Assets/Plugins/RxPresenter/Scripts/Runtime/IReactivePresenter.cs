@@ -21,10 +21,10 @@ namespace Boscohyun.RxPresenter
         
         IObservable<T> ShowAsObservable(bool skipAnimation = default);
         
-        void Hide(Action callback);
+        void Hide(Action<T> callback);
 
-        void Hide(bool skipAnimation, Action callback);
+        void Hide(bool skipAnimation, Action<T> callback);
         
-        IObservable<Unit> HideAsObservable(bool skipAnimation = default);
+        IObservable<T> HideAsObservable(bool skipAnimation = default);
     }
 }
