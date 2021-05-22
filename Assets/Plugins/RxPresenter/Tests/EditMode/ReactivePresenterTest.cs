@@ -22,10 +22,18 @@ namespace Boscohyun.RxPresenter.Tests.EditMode
         {
             _reactivePresenter.Show(skipAnimation);
             _animatedReactivePresenter.Show(skipAnimation);
-            Assert.True(_reactivePresenter.PresenterState == PresenterState.ShowAnimation ||
-                        _reactivePresenter.PresenterState == PresenterState.Shown);
-            Assert.True(_animatedReactivePresenter.PresenterState == PresenterState.ShowAnimation ||
-                        _animatedReactivePresenter.PresenterState == PresenterState.Shown);
+            if (skipAnimation)
+            {
+                Assert.AreEqual(PresenterState.Shown, _reactivePresenter.PresenterState);
+                Assert.AreEqual(PresenterState.Shown, _animatedReactivePresenter.PresenterState);
+            }
+            else
+            {
+                Assert.True(_reactivePresenter.PresenterState == PresenterState.ShowAnimation ||
+                            _reactivePresenter.PresenterState == PresenterState.Shown);
+                Assert.True(_animatedReactivePresenter.PresenterState == PresenterState.ShowAnimation ||
+                            _animatedReactivePresenter.PresenterState == PresenterState.Shown);
+            }
         }
 
         [TestCase(false)]

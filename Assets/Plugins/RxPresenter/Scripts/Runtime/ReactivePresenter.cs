@@ -54,19 +54,21 @@ namespace Boscohyun.RxPresenter
         public virtual void Show(Action<ReactivePresenter> callback) => Show(default, callback);
 
         public virtual void Show(bool skipAnimation, Action<ReactivePresenter> callback) =>
-            ShowAsObservable(skipAnimation).Subscribe(_ => callback?.Invoke(this));
+            ShowAsObservable(skipAnimation).DoOnCompleted(() => callback?.Invoke(this)).Subscribe();
 
         public virtual IObservable<ReactivePresenter> ShowAsObservable(bool skipAnimation = default)
         {
             ShowAnimationBeginning(skipAnimation);
 
             var observable = skipAnimation
-                ? Observable.Return(this)
+                ? Observable
+                    .Return(this)
+                    .DoOnSubscribe(() => PresenterStateReactiveProperty.Value = PresenterState.Shown)
                 : ShowAnimationAsync().ToObservable().Select(_ => this);
 
             return _view.HasViewAnimator && !_view.ViewAnimator.AnimatorAlwaysActive
-                ? observable.DelayFrame(1).DoOnSubscribe(ShowAnimationEnd)
-                : observable.DoOnSubscribe(ShowAnimationEnd);
+                ? observable.DelayFrame(_view.ViewAnimator.AnimatorActiveDelayFrame).DoOnCompleted(ShowAnimationEnd)
+                : observable.DoOnCompleted(ShowAnimationEnd);
         }
 
         protected virtual void ShowAnimationBeginning(bool skip = default)
@@ -122,19 +124,21 @@ namespace Boscohyun.RxPresenter
         public virtual void Hide(Action<ReactivePresenter> callback) => Hide(default, callback);
 
         public virtual void Hide(bool skipAnimation, Action<ReactivePresenter> callback) =>
-            HideAsObservable(skipAnimation).Subscribe(_ => callback?.Invoke(this));
+            HideAsObservable(skipAnimation).DoOnCompleted(() => callback?.Invoke(this)).Subscribe();
 
         public virtual IObservable<ReactivePresenter> HideAsObservable(bool skipAnimation = default)
         {
             HideAnimationBegin(skipAnimation);
 
             var observable = skipAnimation
-                ? Observable.Return(this)
+                ? Observable
+                    .Return(this)
+                    .DoOnSubscribe(() => PresenterStateReactiveProperty.Value = PresenterState.Hidden)
                 : HideAnimationAsync().ToObservable().Select(_ => this);
 
             return _view.HasViewAnimator && !_view.ViewAnimator.AnimatorAlwaysActive
-                ? observable.DelayFrame(1).DoOnSubscribe(HideAnimationEnd)
-                : observable.DoOnSubscribe(HideAnimationEnd);
+                ? observable.DelayFrame(_view.ViewAnimator.AnimatorActiveDelayFrame).DoOnCompleted(HideAnimationEnd)
+                : observable.DoOnCompleted(HideAnimationEnd);
         }
 
         protected virtual void HideAnimationBegin(bool skip = default)
