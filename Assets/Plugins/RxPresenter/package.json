@@ -1,0 +1,30 @@
+{
+  "name": "com.boscohyun.rxpresenter",
+  "version": "0.1.2",
+  "displayName": "RxPresenter",
+  "description": "A simple reactive presenter for Unity.",
+  "unity": "2020.1",
+  "dependencies": {
+    "com.cysharp.unitask": "https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask#2.2.5",
+    "com.neuecc.unirx": "https://github.com/neuecc/UniRx.git?path=Assets/Plugins/UniRx/Scripts#7.1.0"
+  },
+  "keywords": [
+    "RxPresenter",
+    "Reactive",
+    "Presenter",
+    "MVP",
+    "MVRP",
+    "UniRx",
+    "UniTask",
+    "Unity"
+  ],
+  "license": "MIT",
+  "author": {
+    "name": "boscohyun",
+    "email": "boscohyun@gmail.com",
+    "url": "https://github.com/boscohyun"
+  },
+  "publishConfig": {
+    "registry": "https://package.openupm.com"
+  }
+}
