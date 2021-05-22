@@ -7,6 +7,7 @@ namespace Boscohyun.RxPresenter.Examples
 {
     public class ExampleScene01Controller : MonoBehaviour
     {
+        [SerializeField] private bool skipAnimation;
         [SerializeField] private VanillaPresenter leftCube;
         [SerializeField] private VanillaPresenter rightCube;
         [SerializeField] private Button leftButton;
@@ -36,19 +37,15 @@ namespace Boscohyun.RxPresenter.Examples
             switch (state)
             {
                 case PresenterState.ShowAnimation:
-                    selectable.interactable = false;
                     text.text = "Showing Left Cube...";
                     break;
                 case PresenterState.Shown:
-                    selectable.interactable = true;
                     text.text = "Hide Left Cube";
                     break;
                 case PresenterState.HideAnimation:
-                    selectable.interactable = false;
                     text.text = "Hiding Left Cube...";
                     break;
                 case PresenterState.Hidden:
-                    selectable.interactable = true;
                     text.text = "Show Left Cube";
                     break;
                 default:
@@ -56,15 +53,15 @@ namespace Boscohyun.RxPresenter.Examples
             }
         }
 
-        private static void ShowOrHidePresenter(IPresenter presenter)
+        private void ShowOrHidePresenter(IPresenter presenter)
         {
             if (presenter.PresenterState == PresenterState.Hidden)
             {
-                presenter.Show();   
+                presenter.Show(skipAnimation);   
             }
             else if (presenter.PresenterState == PresenterState.Shown)
             {
-                presenter.Hide();
+                presenter.Hide(skipAnimation);
             }
         }
     }
