@@ -3,12 +3,14 @@
     public class ViewAnimator : IViewAnimator
     {
         public bool ActiveSelf { get; private set; }
+        public int AnimatorActiveDelayFrame { get; }
         public bool AnimatorAlwaysActive { get; }
         public ViewAnimatorState CurrentAnimatorState { get; private set; }
         public float CurrentAnimatorStateNormalizedTime { get; private set; }
 
-        public ViewAnimator(bool animatorAlwaysActive = default)
+        public ViewAnimator(int animatorActiveDelayFrame = default, bool animatorAlwaysActive = default)
         {
+            AnimatorActiveDelayFrame = animatorActiveDelayFrame;
             AnimatorAlwaysActive = animatorAlwaysActive;
         }
         

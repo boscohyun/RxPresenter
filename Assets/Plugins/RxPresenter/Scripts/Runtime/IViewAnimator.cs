@@ -2,6 +2,8 @@
 {
     public interface IViewAnimator
     {
+        int AnimatorActiveDelayFrame { get; }
+        
         bool AnimatorAlwaysActive { get; }
         
         ViewAnimatorState CurrentAnimatorState { get; }

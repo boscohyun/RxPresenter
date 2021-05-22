@@ -31,6 +31,8 @@ namespace Boscohyun.RxPresenter
 
         #region IViewAnimator
 
+        int IViewAnimator.AnimatorActiveDelayFrame => 1;
+        
         bool IViewAnimator.AnimatorAlwaysActive => animatorAlwaysEnabled;
 
         ViewAnimatorState IViewAnimator.CurrentAnimatorState =>
