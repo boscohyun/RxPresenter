@@ -11,6 +11,38 @@
 
 # Install Unity Package via OpenUPM
 
-```bash
+### #1 Install "GitDependencyResolverForUnity"
+
+#### Using OpenUPM
+
+```
+$ openupm add com.coffee.git-dependency-resolver
+```
+
+#### Using Git
+
+```json
+{
+  "dependencies": {
+    "com.coffee.git-dependency-resolver": "https://github.com/mob-sakai/GitDependencyResolverForUnity.git"
+  }
+}
+```
+
+### #2 Install "RxPresenter"
+
+#### Using OpenUPM
+
+```
 $ openupm add com.boscohyun.rxpresenter
+```
+
+#### Using Git
+
+```json
+{
+  "dependencies": {
+    "com.boscohyun.rxpresenter": "https://github.com/boscohyun/RxPresenter.git?path=Assets/Plugins/RxPresenter"
+  }
+}
 ```
