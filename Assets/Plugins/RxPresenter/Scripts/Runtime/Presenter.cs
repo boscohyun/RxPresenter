@@ -5,56 +5,15 @@ using UnityEngine;
 namespace Boscohyun.RxPresenter
 {
     [DisallowMultipleComponent]
-    public class Presenter<T> : MonoBehaviour, IReactivePresenter<T>, IView, IViewAnimator
+    public abstract class Presenter<T> : MonoBehaviour, IReactivePresenter<T>
         where T : Presenter<T>
     {
-        protected static readonly int AnimatorHashShow = Animator.StringToHash("Show");
-        protected static readonly int AnimatorHashHide = Animator.StringToHash("Hide");
-
-        private ReactivePresenter _reactivePresenter;
-
-        [SerializeField] private Animator animator;
-        [SerializeField] private bool animatorAlwaysEnabled;
         [SerializeField] private bool showAtAwake;
-
-        #region IView
-
-        bool IView.ActiveSelf => gameObject.activeSelf;
-
-        bool IView.HasViewAnimator => animator;
-
-        IViewAnimator IView.ViewAnimator => this;
-
-        void IView.SetActive(bool active) => gameObject.SetActive(active);
-
-        #endregion
-
-        #region IViewAnimator
-
-        int IViewAnimator.AnimatorActiveDelayFrame => 1;
         
-        bool IViewAnimator.AnimatorAlwaysActive => animatorAlwaysEnabled;
-
-        ViewAnimatorState IViewAnimator.CurrentAnimatorState =>
-            animator.GetCurrentAnimatorStateInfo(default).shortNameHash == AnimatorHashHide
-                ? ViewAnimatorState.Hide
-                : ViewAnimatorState.Show;
-
-        float IViewAnimator.CurrentAnimatorStateNormalizedTime =>
-            animator.GetCurrentAnimatorStateInfo(default).normalizedTime;
+        private ReactivePresenter _reactivePresenter;
         
-        void IViewAnimator.PlayAnimation(ViewAnimatorState viewAnimatorState, float normalizedTime) =>
-            animator.Play(
-                viewAnimatorState == ViewAnimatorState.Hide
-                    ? AnimatorHashHide
-                    : AnimatorHashShow,
-                default,
-                normalizedTime);
-
-        void IViewAnimator.SetActive(bool active) => animator.enabled = active;
-
-        #endregion
-
+        protected abstract IView View { get; }
+        
         public PresenterState PresenterState => _reactivePresenter.PresenterState;
         
         public IObservable<T> OnPresenterStateChange => _reactivePresenter.OnPresenterStateChange.Select(_ => (T) this);
@@ -65,10 +24,10 @@ namespace Boscohyun.RxPresenter
 
         protected virtual void Awake()
         {
-            _reactivePresenter = new ReactivePresenter(this);
+            _reactivePresenter = new ReactivePresenter(View);
             if (showAtAwake)
             {
-                _reactivePresenter.Show();
+                Show();
             }
         }
 
