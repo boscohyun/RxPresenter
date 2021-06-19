@@ -2,7 +2,9 @@
     "name": "RxPresenter-Examples",
     "rootNamespace": "Boscohyun.RxPresenter.Examples",
     "references": [
+        "GUID:b85a9b696dea92b4f9d0efe8b3f0e5b7",
         "GUID:6430a00dcf487ba46bab3dac9f1de8e9",
+        "GUID:01aea1ff25b79fb42a4287602a0fc829",
         "GUID:560b04d1a97f54a4e82edc0cbbb69285"
     ],
     "includePlatforms": [],
@@ -12,6 +14,12 @@
     "precompiledReferences": [],
     "autoReferenced": true,
     "defineConstraints": [],
-    "versionDefines": [],
+    "versionDefines": [
+        {
+            "name": "com.demigiant.dotween",
+            "expression": "",
+            "define": "RXPRESENTER_DOTWEEN_SUPPORT"
+        }
+    ],
     "noEngineReferences": false
 }
