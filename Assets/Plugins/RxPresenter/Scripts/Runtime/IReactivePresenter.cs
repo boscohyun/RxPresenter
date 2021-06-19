@@ -1,9 +1,8 @@
 ﻿using System;
-using UniRx;
 
 namespace Boscohyun.RxPresenter
 {
-    public interface IReactivePresenter<out T> : IDisposable, IPresenter where T : IReactivePresenter<T>
+    public interface IReactivePresenter<out T> : IDisposable, IPresenter where T : IPresenter
     {
         IObservable<T> OnPresenterStateChange { get; }
 
@@ -18,13 +17,13 @@ namespace Boscohyun.RxPresenter
         void Show(Action<T> callback);
 
         void Show(bool skipAnimation, Action<T> callback);
-        
+
         IObservable<T> ShowAsObservable(bool skipAnimation = default);
-        
+
         void Hide(Action<T> callback);
 
         void Hide(bool skipAnimation, Action<T> callback);
-        
+
         IObservable<T> HideAsObservable(bool skipAnimation = default);
     }
 }

@@ -9,8 +9,44 @@
 [uni-rx-link]: https://github.com/neuecc/UniRx
 [uni-task-link]: https://github.com/Cysharp/UniTask
 
-# Install Unity Package via OpenUPM
+# How to Install(OpenUPM)
 
-```bash
+#### #1 Install "GitDependencyResolverForUnity"
+
+```
+$ openupm add com.coffee.git-dependency-resolver
+```
+
+#### #2 Install "RxPresenter"
+
+```
 $ openupm add com.boscohyun.rxpresenter
 ```
+
+## How to Install(manifest.json)
+
+#### #1 Install "GitDependencyResolverForUnity"
+
+```json
+{
+  "dependencies": {
+    "com.coffee.git-dependency-resolver": "https://github.com/mob-sakai/GitDependencyResolverForUnity.git"
+  }
+}
+```
+
+#### #2 Install "RxPresenter"
+
+```json
+{
+  "dependencies": {
+    "com.boscohyun.rxpresenter": "https://github.com/boscohyun/RxPresenter.git?path=Assets/Plugins/RxPresenter"
+  }
+}
+```
+
+# External Supports
+
+- [DOTween](https://github.com/Demigiant/dotween)
+- (wip) [Animation-Sequencer](https://github.com/brunomikoski/Animation-Sequencer)
+- (wip) [UTween](https://github.com/ls9512/UTween)

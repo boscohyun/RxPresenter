@@ -1,9 +1,10 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace Boscohyun.RxPresenter
 {
-    public class AnimatorPresenter<T> : Presenter<T>, IView, IViewAnimator
-        where T : AnimatorPresenter<T>
+    [Serializable]
+    public class AnimatorViewAnimator : IViewAnimator
     {
         private static readonly int AnimatorHashShow = Animator.StringToHash("Show");
         private static readonly int AnimatorHashHide = Animator.StringToHash("Hide");
@@ -11,22 +12,18 @@ namespace Boscohyun.RxPresenter
         [SerializeField] private Animator animator;
         [SerializeField] private bool animatorAlwaysEnabled;
 
-        #region IView
+        public bool HasAnimator => animator;
 
-        bool IView.ActiveSelf => gameObject.activeSelf;
-
-        bool IView.HasViewAnimator => animator;
-
-        IViewAnimator IView.ViewAnimator => this;
-
-        void IView.SetActive(bool active) => gameObject.SetActive(active);
-
-        #endregion
+        public AnimatorViewAnimator(Animator animator, bool animatorAlwaysEnabled)
+        {
+            this.animator = animator;
+            this.animatorAlwaysEnabled = animatorAlwaysEnabled;
+        }
         
         #region IViewAnimator
 
         int IViewAnimator.AnimatorActiveDelayFrame => 1;
-        
+
         bool IViewAnimator.AnimatorAlwaysActive => animatorAlwaysEnabled;
 
         ViewAnimatorState IViewAnimator.CurrentAnimatorState =>
@@ -36,7 +33,7 @@ namespace Boscohyun.RxPresenter
 
         float IViewAnimator.CurrentAnimatorStateNormalizedTime =>
             animator.GetCurrentAnimatorStateInfo(default).normalizedTime;
-        
+
         void IViewAnimator.PlayAnimation(ViewAnimatorState viewAnimatorState, float normalizedTime) =>
             animator.Play(
                 viewAnimatorState == ViewAnimatorState.Hide
@@ -48,7 +45,5 @@ namespace Boscohyun.RxPresenter
         void IViewAnimator.SetActive(bool active) => animator.enabled = active;
 
         #endregion
-
-        protected override IView View => this;
     }
 }
