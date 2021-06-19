@@ -4,10 +4,10 @@
     {
         bool ActiveSelf { get; }
         
+        void SetActive(bool active);
+        
         bool HasViewAnimator { get; }
         
         IViewAnimator ViewAnimator { get; }
-        
-        void SetActive(bool active);
     }
 }

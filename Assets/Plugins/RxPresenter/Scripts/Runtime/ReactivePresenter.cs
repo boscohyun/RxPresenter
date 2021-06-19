@@ -1,190 +1,30 @@
 ﻿using System;
-using Cysharp.Threading.Tasks;
 using UniRx;
 
 namespace Boscohyun.RxPresenter
 {
-    public class ReactivePresenter : IReactivePresenter<ReactivePresenter>
+    public class ReactivePresenter<T> : Presenter, IReactivePresenter<T> where T : ReactivePresenter<T>
     {
-        private readonly IView _view;
+        public IObservable<T> OnPresenterStateChange => Humble.OnPresenterStateChange.Select(_ => (T) this);
+        public IObservable<T> OnShowAnimationBeginning => Humble.OnPresenterStateChange.Select(_ => (T) this);
+        public IObservable<T> OnShowAnimationEnd => Humble.OnPresenterStateChange.Select(_ => (T) this);
+        public IObservable<T> OnHideAnimationBeginning => Humble.OnPresenterStateChange.Select(_ => (T) this);
+        public IObservable<T> OnHideAnimationEnd => Humble.OnPresenterStateChange.Select(_ => (T) this);
 
-        protected readonly ReactiveProperty<PresenterState> PresenterStateReactiveProperty =
-            new ReactiveProperty<PresenterState>();
+        public void Show(Action<T> callback) => Humble.Show(_ => callback?.Invoke((T) this));
 
-        protected readonly Subject<ReactivePresenter> ShowAnimationBeginningSubject = new Subject<ReactivePresenter>();
-        protected readonly Subject<ReactivePresenter> ShowAnimationEndSubject = new Subject<ReactivePresenter>();
-        protected readonly Subject<ReactivePresenter> HideAnimationBeginningSubject = new Subject<ReactivePresenter>();
-        protected readonly Subject<ReactivePresenter> HideAnimationEndSubject = new Subject<ReactivePresenter>();
+        public void Show(bool skipAnimation, Action<T> callback) =>
+            Humble.Show(skipAnimation, _ => callback?.Invoke((T) this));
 
-        public PresenterState PresenterState => PresenterStateReactiveProperty.Value;
+        public IObservable<T> ShowAsObservable(bool skipAnimation = default) =>
+            Humble.ShowAsObservable(skipAnimation).Select(_ => (T) this);
 
-        public IObservable<ReactivePresenter> OnPresenterStateChange => PresenterStateReactiveProperty.Select(_ => this);
-        public IObservable<ReactivePresenter> OnShowAnimationBeginning => ShowAnimationBeginningSubject;
-        public IObservable<ReactivePresenter> OnShowAnimationEnd => ShowAnimationEndSubject;
-        public IObservable<ReactivePresenter> OnHideAnimationBeginning => HideAnimationBeginningSubject;
-        public IObservable<ReactivePresenter> OnHideAnimationEnd => HideAnimationEndSubject;
+        public void Hide(Action<T> callback) => Humble.Hide(_ => callback?.Invoke((T) this));
 
-        public ReactivePresenter(IView view)
-        {
-            _view = view ?? throw new ArgumentNullException($"{nameof(view)} is null.");
-            if (_view.HasViewAnimator && !_view.ViewAnimator.AnimatorAlwaysActive)
-            {
-                _view.ViewAnimator.SetActive(false);
-                _view.ViewAnimator.SetActive(false);
-            }
+        public void Hide(bool skipAnimation, Action<T> callback) =>
+            Humble.Hide(skipAnimation, _ => callback?.Invoke((T) this));
 
-            PresenterStateReactiveProperty.Value = _view.ActiveSelf
-                ? PresenterState.Shown
-                : PresenterState.Hidden;
-        }
-
-        public virtual void Dispose()
-        {
-            PresenterStateReactiveProperty.Dispose();
-            ShowAnimationBeginningSubject.Dispose();
-            ShowAnimationEndSubject.Dispose();
-            HideAnimationBeginningSubject.Dispose();
-            HideAnimationEndSubject.Dispose();
-        }
-
-        #region Show
-
-        public virtual void Show(bool skipAnimation = default) => Show(skipAnimation, null);
-
-        public virtual void Show(Action<ReactivePresenter> callback) => Show(default, callback);
-
-        public virtual void Show(bool skipAnimation, Action<ReactivePresenter> callback) =>
-            ShowAsObservable(skipAnimation).DoOnCompleted(() => callback?.Invoke(this)).Subscribe();
-
-        public virtual IObservable<ReactivePresenter> ShowAsObservable(bool skipAnimation = default)
-        {
-            ShowAnimationBeginning(skipAnimation);
-
-            var observable = skipAnimation
-                ? Observable
-                    .Return(this)
-                    .DoOnSubscribe(() => PresenterStateReactiveProperty.Value = PresenterState.Shown)
-                : ShowAnimationAsync().ToObservable().Select(_ => this);
-
-            return _view.HasViewAnimator && !_view.ViewAnimator.AnimatorAlwaysActive
-                ? observable.DelayFrame(_view.ViewAnimator.AnimatorActiveDelayFrame).DoOnCompleted(ShowAnimationEnd)
-                : observable.DoOnCompleted(ShowAnimationEnd);
-        }
-
-        protected virtual void ShowAnimationBeginning(bool skip = default)
-        {
-            PresenterStateReactiveProperty.Value = PresenterState.ShowAnimation;
-            _view.SetActive(true);
-
-            if (_view.HasViewAnimator)
-            {
-                if (!_view.ViewAnimator.AnimatorAlwaysActive)
-                {
-                    _view.ViewAnimator.SetActive(true);
-                }
-
-                _view.ViewAnimator.PlayAnimation(ViewAnimatorState.Show, skip ? 1f : 0f);
-            }
-
-            ShowAnimationBeginningSubject.OnNext(this);
-        }
-
-        protected virtual async UniTask ShowAnimationAsync()
-        {
-            if (_view.HasViewAnimator)
-            {
-                await UniTask.WaitWhile(() =>
-                    _view.ViewAnimator.CurrentAnimatorState != ViewAnimatorState.Show);
-                await UniTask.WaitWhile(() => _view.ViewAnimator.CurrentAnimatorStateNormalizedTime < 1f);
-            }
-            else
-            {
-                await UniTask.CompletedTask;
-            }
-        }
-
-        protected virtual void ShowAnimationEnd()
-        {
-            PresenterStateReactiveProperty.Value = PresenterState.Shown;
-
-            if (_view.HasViewAnimator && !_view.ViewAnimator.AnimatorAlwaysActive)
-            {
-                _view.ViewAnimator.SetActive(false);
-            }
-
-            ShowAnimationEndSubject.OnNext(this);
-        }
-
-        #endregion
-
-        #region Hide
-
-        public virtual void Hide(bool skipAnimation = default) => Hide(skipAnimation, null);
-
-        public virtual void Hide(Action<ReactivePresenter> callback) => Hide(default, callback);
-
-        public virtual void Hide(bool skipAnimation, Action<ReactivePresenter> callback) =>
-            HideAsObservable(skipAnimation).DoOnCompleted(() => callback?.Invoke(this)).Subscribe();
-
-        public virtual IObservable<ReactivePresenter> HideAsObservable(bool skipAnimation = default)
-        {
-            HideAnimationBegin(skipAnimation);
-
-            var observable = skipAnimation
-                ? Observable
-                    .Return(this)
-                    .DoOnSubscribe(() => PresenterStateReactiveProperty.Value = PresenterState.Hidden)
-                : HideAnimationAsync().ToObservable().Select(_ => this);
-
-            return _view.HasViewAnimator && !_view.ViewAnimator.AnimatorAlwaysActive
-                ? observable.DelayFrame(_view.ViewAnimator.AnimatorActiveDelayFrame).DoOnCompleted(HideAnimationEnd)
-                : observable.DoOnCompleted(HideAnimationEnd);
-        }
-
-        protected virtual void HideAnimationBegin(bool skip = default)
-        {
-            PresenterStateReactiveProperty.Value = PresenterState.HideAnimation;
-
-            if (_view.HasViewAnimator)
-            {
-                if (!_view.ViewAnimator.AnimatorAlwaysActive)
-                {
-                    _view.ViewAnimator.SetActive(true);
-                }
-
-                _view.ViewAnimator.PlayAnimation(ViewAnimatorState.Hide, skip ? 1f : 0f);
-            }
-
-            HideAnimationBeginningSubject.OnNext(this);
-        }
-
-        protected virtual async UniTask HideAnimationAsync()
-        {
-            if (_view.HasViewAnimator)
-            {
-                await UniTask.WaitWhile(() =>
-                    _view.ViewAnimator.CurrentAnimatorState != ViewAnimatorState.Hide);
-                await UniTask.WaitWhile(() => _view.ViewAnimator.CurrentAnimatorStateNormalizedTime < 1f);
-            }
-            else
-            {
-                await UniTask.CompletedTask;
-            }
-        }
-
-        protected virtual void HideAnimationEnd()
-        {
-            PresenterStateReactiveProperty.Value = PresenterState.Hidden;
-            _view.SetActive(false);
-
-            if (_view.HasViewAnimator && !_view.ViewAnimator.AnimatorAlwaysActive)
-            {
-                _view.ViewAnimator.SetActive(false);
-            }
-
-            HideAnimationEndSubject.OnNext(this);
-        }
-
-        #endregion
+        public IObservable<T> HideAsObservable(bool skipAnimation = default) =>
+            Humble.HideAsObservable(skipAnimation).Select(_ => (T) this);
     }
 }
