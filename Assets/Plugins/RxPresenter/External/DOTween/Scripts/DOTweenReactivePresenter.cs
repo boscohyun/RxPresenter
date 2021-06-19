@@ -1,9 +1,10 @@
 ﻿using System;
 using UniRx;
 
-namespace Boscohyun.RxPresenter
+namespace Boscohyun.RxPresenter.External.DOTween
 {
-    public class ReactivePresenter<T> : Presenter, IReactivePresenter<T> where T : ReactivePresenter<T>
+    public abstract class DOTweenReactivePresenter<T> : DOTweenPresenter, IReactivePresenter<T>
+        where T : DOTweenReactivePresenter<T>
     {
         public IObservable<T> OnPresenterStateChange => Humble.OnPresenterStateChange.Select(_ => (T) this);
         public IObservable<T> OnShowAnimationBeginning => Humble.OnPresenterStateChange.Select(_ => (T) this);

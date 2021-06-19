@@ -1,6 +1,6 @@
 ﻿namespace Boscohyun.RxPresenter.Examples
 {
-    public class VanillaPresenter : AnimatorPresenter<VanillaPresenter>
+    public class VanillaPresenter : Presenter
     {
     }
 }
