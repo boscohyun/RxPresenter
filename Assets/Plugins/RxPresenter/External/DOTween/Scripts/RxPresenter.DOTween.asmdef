@@ -1,0 +1,24 @@
+{
+    "name": "RxPresenter.DOTween",
+    "rootNamespace": "Boscohyun",
+    "references": [
+        "GUID:b85a9b696dea92b4f9d0efe8b3f0e5b7",
+        "GUID:6430a00dcf487ba46bab3dac9f1de8e9",
+        "GUID:560b04d1a97f54a4e82edc0cbbb69285"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [
+        {
+            "name": "com.demigiant.dotween",
+            "expression": "",
+            "define": "RXPRESENTER_DOTWEEN_SUPPORT"
+        }
+    ],
+    "noEngineReferences": false
+}
