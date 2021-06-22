@@ -36,9 +36,8 @@ namespace Boscohyun.RxPresenter
         public HumbleReactivePresenter(IView view)
         {
             View = view ?? throw new ArgumentNullException($"{nameof(view)} is null.");
-            if (View.HasViewAnimator && !this.View.ViewAnimator.AnimatorAlwaysActive)
+            if (View.HasViewAnimator && !View.ViewAnimator.AnimatorAlwaysActive)
             {
-                View.ViewAnimator.SetActive(false);
                 View.ViewAnimator.SetActive(false);
             }
 
