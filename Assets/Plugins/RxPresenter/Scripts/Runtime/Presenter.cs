@@ -25,12 +25,14 @@ namespace Boscohyun.RxPresenter
 
         protected virtual void Awake()
         {
-            Humble = new HumbleReactivePresenter(this);
+            Humble = CreateHumbleObject();
             if (showAtAwake)
             {
                 ShowAtAwake();
             }
         }
+
+        protected virtual HumbleReactivePresenter CreateHumbleObject() => new HumbleReactivePresenter(this);
 
         protected virtual void ShowAtAwake() => Show();
 

@@ -1,6 +1,6 @@
 {
   "name": "com.boscohyun.rxpresenter",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "displayName": "RxPresenter",
   "description": "A simple reactive presenter for Unity.",
   "unity": "2020.1",
