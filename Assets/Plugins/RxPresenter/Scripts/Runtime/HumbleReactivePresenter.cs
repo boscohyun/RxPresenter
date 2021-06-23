@@ -8,6 +8,13 @@ namespace Boscohyun.RxPresenter
     {
         protected readonly IView View;
 
+        protected readonly Action<bool> ShowAnimationBeginningDelegate;
+        protected readonly Func<UniTask> ShowAnimationAsyncDelegate;
+        protected readonly Action ShowAnimationEndDelegate;
+        protected readonly Action<bool> HideAnimationBeginningDelegate;
+        protected readonly Func<UniTask> HideAnimationAsyncDelegate;
+        protected readonly Action HideAnimationEndDelegate;
+
         protected readonly ReactiveProperty<PresenterState> PresenterStateReactiveProperty =
             new ReactiveProperty<PresenterState>();
 
@@ -36,15 +43,31 @@ namespace Boscohyun.RxPresenter
         public HumbleReactivePresenter(IView view)
         {
             View = view ?? throw new ArgumentNullException($"{nameof(view)} is null.");
-            if (View.HasViewAnimator && !this.View.ViewAnimator.AnimatorAlwaysActive)
+            if (View.HasViewAnimator && !View.ViewAnimator.AnimatorAlwaysActive)
             {
-                View.ViewAnimator.SetActive(false);
                 View.ViewAnimator.SetActive(false);
             }
 
             PresenterStateReactiveProperty.Value = View.ActiveSelf
                 ? PresenterState.Shown
                 : PresenterState.Hidden;
+        }
+
+        public HumbleReactivePresenter(
+            IView view,
+            Action<bool> showAnimationBeginning,
+            Func<UniTask> showAnimationAsync,
+            Action showAnimationEnd,
+            Action<bool> hideAnimationBeginning,
+            Func<UniTask> hideAnimationAsync,
+            Action hideAnimationEnd) : this(view)
+        {
+            ShowAnimationBeginningDelegate = showAnimationBeginning;
+            ShowAnimationAsyncDelegate = showAnimationAsync;
+            ShowAnimationEndDelegate = showAnimationEnd;
+            HideAnimationBeginningDelegate = hideAnimationBeginning;
+            HideAnimationAsyncDelegate = hideAnimationAsync;
+            HideAnimationEndDelegate = hideAnimationEnd;
         }
 
         public virtual void Dispose()
@@ -83,44 +106,24 @@ namespace Boscohyun.RxPresenter
         protected virtual void ShowAnimationBeginning(bool skip = default)
         {
             PresenterStateReactiveProperty.Value = PresenterState.ShowAnimation;
-            View.SetActive(true);
-
-            if (View.HasViewAnimator)
-            {
-                if (!View.ViewAnimator.AnimatorAlwaysActive)
-                {
-                    View.ViewAnimator.SetActive(true);
-                }
-
-                View.ViewAnimator.PlayAnimation(ViewAnimatorState.Show, skip ? 1f : 0f);
-            }
-
+            ShowAnimationBeginningDelegate?.Invoke(skip);
             ShowAnimationBeginningSubject.OnNext(this);
         }
 
         protected virtual async UniTask ShowAnimationAsync()
         {
-            if (View.HasViewAnimator)
+            if (ShowAnimationAsyncDelegate is null)
             {
-                await UniTask.WaitWhile(() =>
-                    View.ViewAnimator.CurrentAnimatorState != ViewAnimatorState.Show);
-                await UniTask.WaitWhile(() => View.ViewAnimator.CurrentAnimatorStateNormalizedTime < 1f);
+                return;
             }
-            else
-            {
-                await UniTask.CompletedTask;
-            }
+
+            await ShowAnimationAsyncDelegate.Invoke();
         }
 
         protected virtual void ShowAnimationEnd()
         {
             PresenterStateReactiveProperty.Value = PresenterState.Shown;
-
-            if (View.HasViewAnimator && !View.ViewAnimator.AnimatorAlwaysActive)
-            {
-                View.ViewAnimator.SetActive(false);
-            }
-
+            ShowAnimationEndDelegate?.Invoke();
             ShowAnimationEndSubject.OnNext(this);
         }
 
@@ -137,7 +140,7 @@ namespace Boscohyun.RxPresenter
 
         public virtual IObservable<HumbleReactivePresenter> HideAsObservable(bool skipAnimation = default)
         {
-            HideAnimationBegin(skipAnimation);
+            HideAnimationBeginning(skipAnimation);
 
             var observable = skipAnimation
                 ? Observable
@@ -150,47 +153,27 @@ namespace Boscohyun.RxPresenter
                 : observable.DoOnCompleted(HideAnimationEnd);
         }
 
-        protected virtual void HideAnimationBegin(bool skip = default)
+        protected virtual void HideAnimationBeginning(bool skip = default)
         {
             PresenterStateReactiveProperty.Value = PresenterState.HideAnimation;
-
-            if (View.HasViewAnimator)
-            {
-                if (!View.ViewAnimator.AnimatorAlwaysActive)
-                {
-                    View.ViewAnimator.SetActive(true);
-                }
-
-                View.ViewAnimator.PlayAnimation(ViewAnimatorState.Hide, skip ? 1f : 0f);
-            }
-
+            HideAnimationBeginningDelegate?.Invoke(skip);
             HideAnimationBeginningSubject.OnNext(this);
         }
 
         protected virtual async UniTask HideAnimationAsync()
         {
-            if (View.HasViewAnimator)
+            if (ShowAnimationAsyncDelegate is null)
             {
-                await UniTask.WaitWhile(() =>
-                    View.ViewAnimator.CurrentAnimatorState != ViewAnimatorState.Hide);
-                await UniTask.WaitWhile(() => View.ViewAnimator.CurrentAnimatorStateNormalizedTime < 1f);
+                return;
             }
-            else
-            {
-                await UniTask.CompletedTask;
-            }
+
+            await HideAnimationAsyncDelegate.Invoke();
         }
 
         protected virtual void HideAnimationEnd()
         {
             PresenterStateReactiveProperty.Value = PresenterState.Hidden;
-            View.SetActive(false);
-
-            if (View.HasViewAnimator && !View.ViewAnimator.AnimatorAlwaysActive)
-            {
-                View.ViewAnimator.SetActive(false);
-            }
-
+            HideAnimationEndDelegate?.Invoke();
             HideAnimationEndSubject.OnNext(this);
         }
 
