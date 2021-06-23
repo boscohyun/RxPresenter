@@ -162,7 +162,7 @@ namespace Boscohyun.RxPresenter
 
         protected virtual async UniTask HideAnimationAsync()
         {
-            if (ShowAnimationAsyncDelegate is null)
+            if (HideAnimationAsyncDelegate is null)
             {
                 return;
             }
