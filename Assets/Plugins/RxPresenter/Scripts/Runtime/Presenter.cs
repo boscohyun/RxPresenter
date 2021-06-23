@@ -8,7 +8,8 @@ namespace Boscohyun.RxPresenter
     {
         [SerializeField] protected bool showAtAwake;
 
-        public HumbleReactivePresenter Humble { get; private set; }
+        private HumbleReactivePresenter _humble;
+        public HumbleReactivePresenter Humble => _humble ??= CreateHumbleObject();
 
         public PresenterState PresenterState => Humble.PresenterState;
 
@@ -24,24 +25,23 @@ namespace Boscohyun.RxPresenter
 
         #endregion
 
-        protected virtual void Awake()
-        {
-            Humble = CreateHumbleObject();
-            if (showAtAwake)
-            {
-                ShowAtAwake();
-            }
-        }
-
         protected virtual HumbleReactivePresenter CreateHumbleObject() => new HumbleReactivePresenter(
             this,
             ShowAnimationBeginning,
             ShowAnimationAsync,
             ShowAnimationEnd,
-            ShowAnimationBeginning,
-            ShowAnimationAsync,
-            ShowAnimationEnd
+            HideAnimationBeginning,
+            HideAnimationAsync,
+            HideAnimationEnd
         );
+
+        protected virtual void Awake()
+        {
+            if (showAtAwake)
+            {
+                ShowAtAwake();
+            }
+        }
 
         protected virtual void ShowAtAwake() => Show();
 
