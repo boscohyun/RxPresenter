@@ -2,6 +2,7 @@
     "name": "RxPresenter.Tests.EditMode",
     "rootNamespace": "Boscohyun",
     "references": [
+        "UniTask",
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner",
         "RxPresenter"
