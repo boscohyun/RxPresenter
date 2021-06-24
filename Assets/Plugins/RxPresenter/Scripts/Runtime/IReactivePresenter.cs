@@ -1,8 +1,9 @@
 ﻿using System;
+using Cysharp.Threading.Tasks;
 
 namespace Boscohyun.RxPresenter
 {
-    public interface IReactivePresenter<out T> : IDisposable, IPresenter where T : IPresenter
+    public interface IReactivePresenter<T> : IDisposable, IPresenter where T : IPresenter
     {
         IObservable<T> OnPresenterStateChange { get; }
 
@@ -20,10 +21,14 @@ namespace Boscohyun.RxPresenter
 
         IObservable<T> ShowAsObservable(bool skipAnimation = default);
 
+        UniTask<T> ShowAsync(bool skipAnimation = default);
+
         void Hide(Action<T> callback);
 
         void Hide(bool skipAnimation, Action<T> callback);
 
         IObservable<T> HideAsObservable(bool skipAnimation = default);
+        
+        UniTask<T> HideAsync(bool skipAnimation = default);
     }
 }
