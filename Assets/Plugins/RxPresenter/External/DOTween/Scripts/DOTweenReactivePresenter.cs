@@ -1,4 +1,5 @@
 ﻿using System;
+using Cysharp.Threading.Tasks;
 using UniRx;
 
 namespace Boscohyun.RxPresenter.External.DOTween
@@ -20,6 +21,9 @@ namespace Boscohyun.RxPresenter.External.DOTween
         public IObservable<T> ShowAsObservable(bool skipAnimation = default) =>
             Humble.ShowAsObservable(skipAnimation).Select(_ => (T) this);
 
+        public async UniTask<T> ShowAsync(bool skipAnimation = default) =>
+            await ShowAsObservable(skipAnimation).ToTask();
+
         public void Hide(Action<T> callback) => Humble.Hide(_ => callback?.Invoke((T) this));
 
         public void Hide(bool skipAnimation, Action<T> callback) =>
@@ -27,5 +31,8 @@ namespace Boscohyun.RxPresenter.External.DOTween
 
         public IObservable<T> HideAsObservable(bool skipAnimation = default) =>
             Humble.HideAsObservable(skipAnimation).Select(_ => (T) this);
+        
+        public async UniTask<T> HideAsync(bool skipAnimation = default) =>
+            await HideAsObservable(skipAnimation).ToTask();
     }
 }
