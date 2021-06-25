@@ -1,4 +1,5 @@
-﻿using DG.Tweening;
+﻿#if RXPRESENTER_DOTWEEN_SUPPORT
+using DG.Tweening;
 
 namespace Boscohyun.RxPresenter.External.DOTween
 {
@@ -73,3 +74,4 @@ namespace Boscohyun.RxPresenter.External.DOTween
         #endregion
     }
 }
+#endif

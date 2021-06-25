@@ -1,4 +1,5 @@
-﻿using System;
+﻿#if RXPRESENTER_DOTWEEN_SUPPORT
+using System;
 using Cysharp.Threading.Tasks;
 using UniRx;
 
@@ -36,3 +37,4 @@ namespace Boscohyun.RxPresenter.External.DOTween
             await HideAsObservable(skipAnimation).ToTask();
     }
 }
+#endif
