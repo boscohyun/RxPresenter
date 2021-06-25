@@ -103,6 +103,9 @@ namespace Boscohyun.RxPresenter
                 : observable.DoOnCompleted(ShowAnimationEnd);
         }
 
+        public async UniTask<HumbleReactivePresenter> ShowAsync(bool skipAnimation = default) =>
+            await ShowAsObservable(skipAnimation).ToTask();
+
         protected virtual void ShowAnimationBeginning(bool skip = default)
         {
             PresenterStateReactiveProperty.Value = PresenterState.ShowAnimation;
@@ -152,6 +155,9 @@ namespace Boscohyun.RxPresenter
                 ? observable.DelayFrame(View.ViewAnimator.AnimatorActiveDelayFrame).DoOnCompleted(HideAnimationEnd)
                 : observable.DoOnCompleted(HideAnimationEnd);
         }
+
+        public async UniTask<HumbleReactivePresenter> HideAsync(bool skipAnimation = default) =>
+            await HideAsObservable(skipAnimation).ToTask();
 
         protected virtual void HideAnimationBeginning(bool skip = default)
         {
