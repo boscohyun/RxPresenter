@@ -1,40 +1,32 @@
 ﻿#if RXPRESENTER_DOTWEEN_SUPPORT
-using System;
-using Cysharp.Threading.Tasks;
-using UniRx;
+using DG.Tweening;
 
 namespace Boscohyun.RxPresenter.External.DOTween
 {
-    public abstract class DOTweenReactivePresenter<T> : DOTweenPresenter, IReactivePresenter<T>
-        where T : DOTweenReactivePresenter<T>
+    public abstract class DOTweenReactivePresenter<T> : ReactivePresenter<T> where T : DOTweenReactivePresenter<T>
     {
-        public IObservable<T> OnPresenterStateChange => Humble.OnPresenterStateChange.Select(_ => (T) this);
-        public IObservable<T> OnShowAnimationBeginning => Humble.OnPresenterStateChange.Select(_ => (T) this);
-        public IObservable<T> OnShowAnimationEnd => Humble.OnPresenterStateChange.Select(_ => (T) this);
-        public IObservable<T> OnHideAnimationBeginning => Humble.OnPresenterStateChange.Select(_ => (T) this);
-        public IObservable<T> OnHideAnimationEnd => Humble.OnPresenterStateChange.Select(_ => (T) this);
+        private DOTweenViewAnimator _viewAnimator;
 
-        public void Show(Action<T> callback) => Humble.Show(_ => callback?.Invoke((T) this));
+        #region IView
 
-        public void Show(bool skipAnimation, Action<T> callback) =>
-            Humble.Show(skipAnimation, _ => callback?.Invoke((T) this));
+        public override bool HasViewAnimator => _viewAnimator.hasTween;
 
-        public IObservable<T> ShowAsObservable(bool skipAnimation = default) =>
-            Humble.ShowAsObservable(skipAnimation).Select(_ => (T) this);
+        public override IViewAnimator ViewAnimator => _viewAnimator ??= CreateViewAnimator();
 
-        public async UniTask<T> ShowAsync(bool skipAnimation = default) =>
-            await ShowAsObservable(skipAnimation).ToTask();
+        #endregion
 
-        public void Hide(Action<T> callback) => Humble.Hide(_ => callback?.Invoke((T) this));
+        protected virtual DOTweenViewAnimator CreateViewAnimator() =>
+            new DOTweenViewAnimator(GetShowTween(), GetHideTween());
 
-        public void Hide(bool skipAnimation, Action<T> callback) =>
-            Humble.Hide(skipAnimation, _ => callback?.Invoke((T) this));
+        protected override void ShowAtAwake()
+        {
+            Hide(true);
+            base.ShowAtAwake();
+        }
 
-        public IObservable<T> HideAsObservable(bool skipAnimation = default) =>
-            Humble.HideAsObservable(skipAnimation).Select(_ => (T) this);
-        
-        public async UniTask<T> HideAsync(bool skipAnimation = default) =>
-            await HideAsObservable(skipAnimation).ToTask();
+        protected abstract Tween GetShowTween();
+
+        protected abstract Tween GetHideTween();
     }
 }
 #endif
