@@ -11,15 +11,12 @@ namespace Boscohyun.RxPresenter.External.DOTween
 
         public override bool HasViewAnimator => _viewAnimator.hasTween;
 
-        public override IViewAnimator ViewAnimator => _viewAnimator;
+        public override IViewAnimator ViewAnimator => _viewAnimator ??= CreateViewAnimator();
 
         #endregion
 
-        protected override void Awake()
-        {
-            _viewAnimator = new DOTweenViewAnimator(GetShowTween(), GetHideTween());
-            base.Awake();
-        }
+        protected virtual DOTweenViewAnimator CreateViewAnimator() =>
+            new DOTweenViewAnimator(GetShowTween(), GetHideTween());
 
         protected override void ShowAtAwake()
         {
