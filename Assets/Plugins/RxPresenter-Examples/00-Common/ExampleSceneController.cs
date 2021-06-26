@@ -19,7 +19,7 @@ namespace Boscohyun.RxPresenter.Examples
             InitializeSubscriptions(rightCubes, rightTextButton);
         }
 
-        private void InitializeSubscriptions(IReadOnlyList<Presenter> presenters, TextButton textButton)
+        private void InitializeSubscriptions(IReadOnlyList<IPresenter> presenters, TextButton textButton)
         {
             for (var i = 0; i < presenters.Count; i++)
             {
