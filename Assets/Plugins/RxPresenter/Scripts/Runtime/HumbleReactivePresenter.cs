@@ -4,6 +4,7 @@ using UniRx;
 
 namespace Boscohyun.RxPresenter
 {
+    [Serializable]
     public class HumbleReactivePresenter : IReactivePresenter<HumbleReactivePresenter>
     {
         protected readonly IView View;
@@ -30,6 +31,8 @@ namespace Boscohyun.RxPresenter
         protected readonly Subject<HumbleReactivePresenter> HideAnimationEndSubject =
             new Subject<HumbleReactivePresenter>();
 
+        public HumbleReactivePresenter Humble => this;
+        
         public PresenterState PresenterState => PresenterStateReactiveProperty.Value;
 
         public IObservable<HumbleReactivePresenter> OnPresenterStateChange =>
