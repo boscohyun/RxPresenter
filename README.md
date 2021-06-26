@@ -16,38 +16,22 @@
 [uni-rx-link]: https://github.com/neuecc/UniRx
 [uni-task-link]: https://github.com/Cysharp/UniTask
 
-# How to Install(OpenUPM)
+# How to Install
 
-#### #1 Install "GitDependencyResolverForUnity"
-
-```
-$ openupm add com.coffee.git-dependency-resolver
-```
-
-#### #2 Install "RxPresenter"
+### Install via OpenUPM(recommended)
 
 ```
 $ openupm add com.boscohyun.rxpresenter
 ```
 
-## How to Install(manifest.json)
-
-#### #1 Install "GitDependencyResolverForUnity"
+### Install via Manifest
 
 ```json
 {
   "dependencies": {
-    "com.coffee.git-dependency-resolver": "https://github.com/mob-sakai/GitDependencyResolverForUnity.git"
-  }
-}
-```
-
-#### #2 Install "RxPresenter"
-
-```json
-{
-  "dependencies": {
-    "com.boscohyun.rxpresenter": "https://github.com/boscohyun/RxPresenter.git?path=Assets/Plugins/RxPresenter"
+    "com.boscohyun.rxpresenter": "https://github.com/boscohyun/RxPresenter.git?path=Assets/Plugins/RxPresenter",
+    "com.cysharp.unitask": "https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask",
+    "com.neuecc.unirx": "https://github.com/neuecc/UniRx.git?path=Assets/Plugins/UniRx/Scripts"
   }
 }
 ```
